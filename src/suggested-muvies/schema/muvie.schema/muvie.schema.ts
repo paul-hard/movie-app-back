@@ -6,7 +6,7 @@ export type SuggestedMuviesDocument = SuggestedMuvies & Document;
 @Schema({ collection: 'SuggestedDB' })
 export class SuggestedMuvies {
     @Prop()
-    id: number;
+    muvie_id: string;
     @Prop()
     title: string;
 
