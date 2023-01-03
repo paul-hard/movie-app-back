@@ -7,6 +7,7 @@ export type SuggestedMuviesDocument = SuggestedMuvies & Document;
 export class SuggestedMuvies {
     @Prop()
     id: number;
+
     @Prop()
     title: string;
 

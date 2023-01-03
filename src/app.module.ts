@@ -1,11 +1,19 @@
+import { AuthModule } from './auth/auth.module';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from '@nestjs/config';
 import { SuggestedMuvieAppModule } from './suggested-muvies/suggested-muvie-app.module';
+import { UserModule } from './user/user.module';
+
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb+srv://pavlo_admin:lAqMQxiJK6KrVJym@muvie-app.zwfbxxy.mongodb.net/SuggestedDB_SuggestedMuvies?retryWrites=true&w=majority'),
-    SuggestedMuvieAppModule
+    AuthModule,
+    ConfigModule.forRoot(),
+    MongooseModule.forRoot(process.env.MONGO_URI),
+    SuggestedMuvieAppModule,
+    UserModule,
+
   ],
   controllers: [],
   providers: [],
