@@ -5,17 +5,15 @@ import { ConfigModule } from '@nestjs/config';
 import { SuggestedMuvieAppModule } from './suggested-muvies/suggested-muvie-app.module';
 import { UserModule } from './user/user.module';
 
-
 @Module({
   imports: [
     AuthModule,
-    ConfigModule.forRoot(),
-    MongooseModule.forRoot(process.env.MONGO_URI),
+    ConfigModule.forRoot(), // to read .env config?
+    MongooseModule.forRoot(process.env.MONGO_URI), // provide DB url
     SuggestedMuvieAppModule,
     UserModule,
-
   ],
-  controllers: [],
+  controllers: [], //app.controller
   providers: [],
 })
 export class AppModule { }
