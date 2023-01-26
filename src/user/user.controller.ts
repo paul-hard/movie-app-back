@@ -6,16 +6,14 @@ import * as bcrypt from 'bcrypt';
 
 @Controller('auth')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   @Post('/signup')
   async createUser(
     @Body('username') username: string,
     @Body('password') password: string,
   ): Promise<User> {
-    const saltOrRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltOrRounds);
-    const result = await this.userService.createUser(hashedPassword, username);
-    return result;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    return await this.userService.createUser(hashedPassword, username);
   }
 }

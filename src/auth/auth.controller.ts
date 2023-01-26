@@ -5,22 +5,22 @@ import { Response, Request } from 'express';
 import { Get } from '@nestjs/common/decorators';
 import { User } from '../user/user-schema/user.schema';
 import { UserService } from 'src/user/user.service';
-import { config } from 'dotenv'
-config()
+import { config } from 'dotenv';
+config();
 
 @Controller()
 export class AuthController {
   constructor(
     private authService: AuthService,
     private userService: UserService,
-  ) { }
+  ) {}
 
   @Post('auth/signin')
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(AuthGuard('local')) //passthrough used  to enable default flow while using res
   async login(@Req() req: any, @Res({ passthrough: true }) res: Response) {
-
     const jwtToken = await this.authService.login(req.user);
-
+    console.log({"REQUEST": req });
+    console.log({"RESPONSE": res });
     const secretData = {
       accessToken: jwtToken,
       refreshToken: process.env.REFRESH_TOKEN,
@@ -37,7 +37,7 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'))
   @Get('user-profile')
   userProfile(@Req() req: Request) {
-    return req.user
+    return req.user;
   }
 
   // @UseGuards(AuthGuard('jwt'))
@@ -54,28 +54,31 @@ export class AuthController {
     //   httpOnly: true,
     //   expires: new Date(new Date().getTime()+86409000),
     // });
-    return ["Avengers EndGame", "The Lion King", "Harry Potter", "Sherlock Holmes"];
+    return [
+      'Avengers EndGame',
+      'The Lion King',
+      'Harry Potter',
+      'Sherlock Holmes',
+    ];
   }
 
   //-------------------------------------------------------------------------------------------------------------
-
+  // refresh token logic
   @UseGuards(AuthGuard('jwt-refresh'))
   @Get('refresh-token')
   async refreshToken(
     @Req() req: any,
     @Res({ passthrough: true }) res: Response,
   ) {
-    //recive token 
-    console.log("REFRESH TOKEN LOGIC");
+    //recive token
+    console.log('REFRESH TOKEN LOGIC');
     console.log(req.user);
-
     const jwtToken = await this.authService.login(req.user);
-
     const secretData = {
       accessToken: jwtToken,
       refreshToken: process.env.REFRESH_TOKEN,
     };
-    console.log("before cookie");
+    console.log('before cookie');
     console.log(res.cookie);
     res.cookie('auth-cookie', secretData, {
       httpOnly: true,
@@ -84,7 +87,7 @@ export class AuthController {
 
     return { msg: 'success' };
   }
-
+//delete token from cookie
   @Get('logout')
   async logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('auth-cookie');
